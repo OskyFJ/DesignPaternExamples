@@ -1,0 +1,32 @@
+Patrón de diseño Resource pool.
+Clases:
+	Pool: La piscina de recursos que vamos a utilizar.
+	Factory: Es la factoría del recurso que queremos controlar.
+	Resource: Es el recurso cuyo acceso y creación queremos controlar.
+
+Abstract:
+	Se puede tener una piscina de recursos, útil para limitar el número de recursos creados y para reutilizarlos.
+	Se deberían usar diferentes Pools, con un número de elementos distinto para cada una, ajustándose a cada uso más específico.
+	Sin muchos recursos, que ralentizarían el sistema y sin demasiado pocos, limitando su rendimiento.
+	Es muy imporante manejar el Pool de forma sincronizada y thread-safe para que los threads la puedan usar de forma segura y no solapada (bastante común en entornos de servicios web),
+	al fin y al cabo se usará a menudo para instanciar una piscina de hilos de ejecución (threads).
+
+	La clase Pool tiene los atributos: 
+		- resources: Collection // conjunto de recursos
+		// Observación: sería interesante tener una estructura para los recursos en uso y otra para los recursos libres
+		+ rFactory: ResourcesFactory // factoría de recursos
+		+ maxResources: int // límite de recursos
+	Y los métodos:
+		+ getResource() // nos piden este recurso para utilizarlo
+		+ returnResource(resource) // nos indican que ya se puede liberar este recurso
+
+
+	La clase Factory tiene los métodos estáticos:
+		+ createResource() // crea un nuevo recurso
+		+ validateResource(resource) // inicializa el parámetro recurso
+		// OBS: no se llamamaría initResource(res) ?
+		
+	se obtiene un resultado algo mejorado para la lectura de XML, ya que tiene una limitación de escalabilidad y es el número de procesadores
+	pero se obtiene un resultado bastante mejorado al usar este patrón con la escalabilidad relativamente ilimitada de entradas y salidas a través de la red
+	
+	La eficiencia de este patrón reside en reaprovechar recursos que ya se han creado, manteniéndolos en la piscina. Es más eficiente cuanto más costoso es crear un nuevo objeto.
